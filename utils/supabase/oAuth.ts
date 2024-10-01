@@ -6,11 +6,17 @@ export type SignInFunctions = {
   [key in `signInWith${Capitalize<Provider>}`]: () => Promise<null>;
 };
 
-export const useOAuth = (providers: Provider[] = ["google"]) => {
+export const useOAuth = (
+  providers: Provider[] = ["google"],
+  redirectTo?: string
+) => {
   const signInFuncs = providers
     .map((provider) => async () => {
       const { error, ...rest } = await supabase.auth.signInWithOAuth({
         provider,
+        options: {
+          redirectTo: redirectTo || window.location.origin,
+        },
       });
 
       if (error) {
