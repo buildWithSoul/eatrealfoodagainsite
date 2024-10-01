@@ -8,3 +8,5 @@ export function createClient() {
 
   return supabase
 }
+
+export const supabase = createClient();
