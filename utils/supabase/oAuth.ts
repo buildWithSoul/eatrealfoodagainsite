@@ -3,7 +3,7 @@ import { supabase } from "./component";
 import _ from "lodash";
 
 export type SignInFunctions = {
-  [key in `signInWith${Provider}`]: () => Promise<null>;
+  [key in `signInWith${Capitalize<Provider>}`]: () => Promise<null>;
 };
 
 export const useOAuth = (providers: Provider[] = ["google"]) => {
