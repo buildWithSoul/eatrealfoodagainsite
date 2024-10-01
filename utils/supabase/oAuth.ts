@@ -2,6 +2,10 @@ import { Provider } from "@supabase/auth-js/dist/module/lib/types";
 import { supabase } from "./component";
 import _ from "lodash";
 
+export type SignInFunctions = {
+  [key in `signInWith${Provider}`]: () => Promise<null>;
+};
+
 export const useOAuth = (providers: Provider[] = ["google"]) => {
   const signInFuncs = providers
     .map((provider) => async () => {
@@ -14,7 +18,13 @@ export const useOAuth = (providers: Provider[] = ["google"]) => {
       }
       return rest;
     })
-    .reduce(_.merge);
+    .reduce(
+      (acc, func, i) => ({
+        ...acc,
+        ["signInWith" + _.capitalize(providers[i])]: func,
+      }),
+      {} as SignInFunctions
+    );
 
   return signInFuncs;
 };
